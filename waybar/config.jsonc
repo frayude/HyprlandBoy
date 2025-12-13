@@ -1,0 +1,40 @@
+{
+    // General Settings
+    "layer": "top",
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    "spacing": 0,
+    // Load Modules
+    "include": [
+        "~/.config/waybar/modules.json"
+    ],
+    // Modules Left
+    "modules-left": [
+        "custom/appmenu",
+        "hyprland/workspaces",
+        "wlr/taskbar",        
+        "custom/empty"
+    ],
+    // Modules Center
+    "modules-center": [
+        "custom/empty",
+        "clock"
+    ],
+    // Modules Right    
+    "modules-right": [
+        "custom/updates",
+        "custom/privacydots",
+        "temperature",
+        "cpu",
+        "memory",
+        "backlight",
+        "pulseaudio",
+        "bluetooth",
+        "network",
+        "battery",
+        "tray",
+        "custom/exit"
+    ]
+}
