@@ -4,7 +4,8 @@
 {
   // Rofi Application Launcher
   "custom/appmenu": {
-    "format":"󰣇",
+    "format":"󰀻",
+    // "format": "",
     "tooltip-format": "Apps",
     "on-click": "rofi -show drun" 
   },
@@ -30,7 +31,7 @@
   // Taskbar
   "wlr/taskbar": {
     "format": "{icon}",
-    // "icon-size": 18,
+    "icon-size": 15, // default 16
     "tooltip-format": "{title}",
     "on-click": "activate",
     "on-click-middle": "close",
@@ -73,7 +74,7 @@
 
  // Updates Count
   "custom/updates": {
-    "format": "  {}",
+    "format": " {}",
     "escape": true,
     "return-type": "json",
     "exec": "~/.config/hypr/scripts/updates.sh",
@@ -186,7 +187,7 @@
   // backlight / brightness
   "backlight": {
     "format": "{icon} {percent}%",
-    "tooltip-format": " {percent}% Brightness",
+    "tooltip-format": "{percent}% Brightness",
     "format-icons": [
       "",
       "",
