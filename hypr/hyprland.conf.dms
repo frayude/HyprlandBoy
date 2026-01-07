@@ -1,0 +1,233 @@
+# Hyprland Configuration
+# https://wiki.hypr.land/Configuring/
+
+# ==================
+# MONITOR CONFIG
+# ==================
+# Monitors from existing configuration
+monitor=,preferred,auto, 1
+
+# ==================
+# STARTUP APPS
+# ==================
+exec-once = dbus-update-activation-environment --systemd --all
+exec-once = systemctl --user start hyprland-session.target
+exec-once = bash -c "wl-paste --watch cliphist store &"
+
+# ==================
+# INPUT CONFIG
+# ==================
+input {
+    kb_layout = us
+    numlock_by_default = true
+}
+
+# Touchpad
+device {                                              
+    name = elan050b:01-04f3:312b-touchpad
+    sensitivity = 0.3
+}
+
+# ==================
+# GENERAL LAYOUT
+# ==================
+general {
+    gaps_in = 0
+    gaps_out = 0
+    border_size = 0  # off in niri
+
+    col.active_border = rgba(707070ff)
+    col.inactive_border = rgba(d0d0d0ff)
+
+    layout = dwindle
+}
+
+# ==================
+# DECORATION
+# ==================
+decoration {
+    rounding = 0
+
+    active_opacity = 1.0
+    inactive_opacity = 0.9
+
+    shadow {
+        enabled = true
+        range = 30
+        render_power = 5
+        offset = 0 5
+        color = rgba(00000070)
+    }
+}
+
+# ==================
+# ANIMATIONS
+# ==================
+animations {
+    enabled = true
+
+    animation = windowsIn, 1, 3, default
+    animation = windowsOut, 1, 3, default
+    animation = workspaces, 1, 5, default
+    animation = windowsMove, 1, 4, default
+    animation = fade, 1, 3, default
+    animation = border, 1, 3, default
+}
+
+# ==================
+# LAYOUTS
+# ==================
+dwindle {
+    preserve_split = true
+}
+
+master {
+    mfact = 0.5
+}
+
+# ==================
+# MISC
+# ==================
+misc {
+    disable_hyprland_logo = true
+    disable_splash_rendering = true
+    vrr = 1
+}
+
+# ==================
+# WINDOW RULES
+# ==================
+source = ~/.config/hypr/conf/windowrules.conf 
+
+# ==================
+# KEYBINDINGS
+# ==================
+$mod = SUPER
+
+# === Applications ===
+bind = $mainMod, return, exec, kitty                            # Terminal	
+#bind = $mainMod, space, exec, rofi -show drun                  # App Launcher Waybar
+bind = $mainMod, E, exec, nautilus                              # File Manager		
+bind = $mainMod, B, exec, brave		                            # Brave
+bind = $mainMod, C, exec, code			                        # Vscode
+#bind = $mainMod, N, exec, nmgui                                # NM GUI
+bind = $mod, space, exec, dms ipc call spotlight toggle         # Launcher
+bind = $mod, V, exec, dms ipc call clipboard toggle             # Clipboard
+bind = $mod, M, exec, dms ipc call processlist focusOrToggle    # System Monitor
+bind = $mod, comma, exec, dms ipc call settings focusOrToggle   # Settings
+bind = $mod, N, exec, dms ipc call notifications toggle         # Notifications
+bind = $mod SHIFT, N, exec, dms ipc call notepad toggle         # Notepad
+bind = $mod, Y, exec, dms ipc call dankdash wallpaper           # Wallpaper
+
+# === Cheat sheet
+bind = $mod SHIFT, Slash, exec, dms ipc call keybinds toggle hyprland   # Keybindings
+
+# === System Controls ===
+bind = $mod SHIFT, l, exec, dms ipc call lock lock
+bind = $mod SHIFT, E, exit
+bind = $mod SHIFT, P, dpms, off
+
+# === Audio Controls ===
+bindel = , XF86AudioRaiseVolume, exec, dms ipc call audio increment 1
+bindel = , XF86AudioLowerVolume, exec, dms ipc call audio decrement 1
+bindl = , XF86AudioMute, exec, dms ipc call audio mute
+bindl = , XF86AudioMicMute, exec, dms ipc call audio micmute
+
+# === Brightness Controls ===
+bindel = , XF86MonBrightnessUp, exec, dms ipc call brightness increment 1 ""
+bindel = , XF86MonBrightnessDown, exec, dms ipc call brightness decrement 1 ""
+
+# === Display ===
+bind = $mod SHIFT, mouse_down, exec, hyprctl keyword cursor:zoom_factor $(awk "BEGIN {print $(hyprctl getoption cursor:zoom_factor | grep 'float:' | awk '{print $2}') + 0.5}") # Increase display zoom
+bind = $mod SHIFT, mouse_up, exec, hyprctl keyword cursor:zoom_factor $(awk "BEGIN {print $(hyprctl getoption cursor:zoom_factor | grep 'float:' | awk '{print $2}') - 0.5}") # Decrease display zoom
+bind = $mod SHIFT, Z, exec, hyprctl keyword cursor:zoom_factor 1 # Reset display zoom
+
+# === Window Management ===
+bind = $mod, Q, killactive
+bind = $mod SHIFT, Q, exec, hyprctl activeworkspace -j | jq '.id' | xargs -I{} sh -c 'hyprctl clients -j | jq ".[] | select(.workspace.id == {}) | .pid" | xargs kill' # Kill all windows
+
+# === Layout ===
+bind = $mod, F, fullscreen, 1
+bind = $mod SHIFT, F, fullscreen, 0
+bind = $mod, R, layoutmsg, togglesplit
+
+# === Focus Navigation ===
+binde = ALT,Tab,cyclenext           # Cycle between windows
+binde = ALT,Tab,bringactivetotop    # Bring active window to the top
+
+# === Window Movement ===
+bind = $mod, H, movewindow, l
+bind = $mod, J, movewindow, d
+bind = $mod, K, movewindow, u 
+bind = $mod, L, movewindow, r
+
+# === Monitor Navigation ===
+# bind = $mod CTRL, left, focusmonitor, l
+# bind = $mod CTRL, right, focusmonitor, r
+# bind = $mod CTRL, H, focusmonitor, l
+# bind = $mod CTRL, J, focusmonitor, d
+# bind = $mod CTRL, K, focusmonitor, u
+# bind = $mod CTRL, L, focusmonitor, r
+
+# === Move to Monitor ===
+# bind = $mod SHIFT CTRL, left, movewindow, mon:l
+# bind = $mod SHIFT CTRL, down, movewindow, mon:d
+# bind = $mod SHIFT CTRL, up, movewindow, mon:u
+# bind = $mod SHIFT CTRL, right, movewindow, mon:r
+# bind = $mod SHIFT CTRL, H, movewindow, mon:l
+# bind = $mod SHIFT CTRL, J, movewindow, mon:d
+# bind = $mod SHIFT CTRL, K, movewindow, mon:u
+# bind = $mod SHIFT CTRL, L, movewindow, mon:r
+
+# === Actived Workspace Navigation ===
+bind = $mainMod, Tab, workspace, e+1       # Open next workspace
+
+# === Mouse Wheel Navigation ===
+bind = $mod, mouse_down, workspace, m+1
+bind = $mod, mouse_up, workspace, m-1
+
+# === Numbered Workspaces ===
+bind = $mod, 1, workspace, 1
+bind = $mod, 2, workspace, 2
+bind = $mod, 3, workspace, 3
+bind = $mod, 4, workspace, 4
+bind = $mod, 5, workspace, 5
+bind = $mod, 6, workspace, 6
+bind = $mod, 7, workspace, 7
+bind = $mod, 8, workspace, 8
+bind = $mod, 9, workspace, 9
+
+# === Move to Numbered Workspaces ===
+bind = $mod SHIFT, 1, movetoworkspace, 1
+bind = $mod SHIFT, 2, movetoworkspace, 2
+bind = $mod SHIFT, 3, movetoworkspace, 3
+bind = $mod SHIFT, 4, movetoworkspace, 4
+bind = $mod SHIFT, 5, movetoworkspace, 5
+bind = $mod SHIFT, 6, movetoworkspace, 6
+bind = $mod SHIFT, 7, movetoworkspace, 7
+bind = $mod SHIFT, 8, movetoworkspace, 8
+bind = $mod SHIFT, 9, movetoworkspace, 9
+
+# === Column Management ===
+bind = $mod, bracketleft, layoutmsg, preselect l
+bind = $mod, bracketright, layoutmsg, preselect r
+
+# === Move/resize windows with mainMod + Mouse and Dragging ===
+bindmd = $mod, mouse:272, Move window, movewindow
+bindmd = $mod, mouse:273, Resize window, resizewindow
+
+# === Move/resize windows with mainMod + LMB/RMB and dragging ===
+bindd = $mod, code:20, Expand window left, resizeactive, -100 0
+bindd = $mod, code:21, Shrink window left, resizeactive, 100 0
+
+# === Manual Sizing ===
+binde = $mod, minus, resizeactive, -10% 0
+binde = $mod, equal, resizeactive, 10% 0
+bind  = $mod, 0, togglefloating                # Reset size
+binde = $mod SHIFT, minus, resizeactive, 0 -10%
+binde = $mod SHIFT, equal, resizeactive, 0 10%
+
+# === Screenshots ===---
+bind = $mod, s, exec, dms screenshot full           # SS Full
+bind = $mod SHIFT, s, exec, dms screenshot          # SS Area
+# bind = ALT, Print, exec, dms screenshot window    # SS current window
