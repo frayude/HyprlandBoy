@@ -43,7 +43,7 @@ mainbox {
     spacing: 0px;
     margin: 0px;
     padding: 16px;
-    background-color: #161618;
+    background-color: #222224;
     children: [ "inputbar", "listview" ];
 }
 
